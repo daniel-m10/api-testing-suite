@@ -50,3 +50,37 @@ class APIClient:
             HTTP response from the API.
         """
         return self.session.post(f"{self.base_url}{endpoint}", json=json, **kwargs)
+
+    def put(
+        self,
+        endpoint: str,
+        json: dict[str, Any],
+        **kwargs: Any,
+    ) -> requests.Response:
+        """Send a PUT request to the given endpoint.
+
+        Args:
+            endpoint: API endpoint path.
+            json: JSON payload for the request body.
+            **kwargs: Additional keyword arguments passed to requests.
+
+        Returns:
+            HTTP response from the API.
+        """
+        return self.session.put(f"{self.base_url}{endpoint}", json=json, **kwargs)
+
+    def delete(
+        self,
+        endpoint: str,
+        **kwargs: Any,
+    ) -> requests.Response:
+        """Send a DELETE request to the given endpoint.
+
+        Args:
+            endpoint: API endpoint path.
+            **kwargs: Additional keyword arguments passed to requests.
+
+        Returns:
+            HTTP response from the API.
+        """
+        return self.session.delete(f"{self.base_url}{endpoint}", **kwargs)
