@@ -1,0 +1,55 @@
+name: CI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python 3.13
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+
+      - name: Install uv
+        run: pip install uv
+
+      - name: Install dependencies
+        run: uv sync
+
+      - name: Run linter
+        run: uv run ruff check src/ tests/
+
+      - name: Run tests
+        run: uv run pytest --junitxml=results.xml
+
+      - name: Upload test report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-report-${{ github.run_number }}
+          path: |
+            report.html
+            results.xml
+
+      # Uncomment in Week 6 when ai_analyzer.py is implemented
+      # - name: Analyze failures with AI
+      #   if: failure()
+      #   env:
+      #     ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+      #   run: uv run python analyze.py --report results.xml --output ai-report.html
+      #
+      # - name: Upload AI analysis report
+      #   if: failure()
+      #   uses: actions/upload-artifact@v4
+      #   with:
+      #     name: ai-failure-analysis-${{ github.run_number }}
+      #     path: ai-report.html
