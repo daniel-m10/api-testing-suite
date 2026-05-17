@@ -216,3 +216,9 @@ __marimo__/
 
 # Streamlit
 .streamlit/secrets.toml
+
+# Local IDE and generated test artifacts
+.idea/
+report.html
+results.xml
+
